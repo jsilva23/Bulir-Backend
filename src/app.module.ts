@@ -4,6 +4,7 @@ import { DataSource } from 'typeorm';
 import { UsersModule } from './users/users.module';
 import { ServicesModule } from './services/services.module';
 import { ReservationsModule } from './reservations/reservations.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ReservationsModule } from './reservations/reservations.module';
     UsersModule,
     ServicesModule,
     ReservationsModule,
+    AuthModule,
   ],
 })
 export class AppModule {

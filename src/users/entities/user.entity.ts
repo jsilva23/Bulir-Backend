@@ -1,3 +1,4 @@
+import { Role } from 'src/util/roles';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
@@ -15,10 +16,10 @@ export class User {
   nif: string;
 
   @Column()
-  password: string;
+  passwordHash: string;
 
-  @Column()
-  role: string;
+  @Column({ type: 'enum', enum: ['Client', 'Provider'], default: 'Client' })
+  role: Role;
 
   @Column({ default: 0 })
   balance: number;
