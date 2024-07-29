@@ -1,8 +1,7 @@
-Claro! Aqui está um exemplo de um README para o projeto NestJS:
 
----
+# Exercício , Vaga de Desenvolvedor - Bulir Technology
 
-# Plataforma de Reservas API
+## Plataforma de Reservas API
 
 Esta é uma API RESTful construída com NestJS para uma plataforma onde clientes podem fazer reservas em diferentes serviços. A API permite o gerenciamento de usuários (clientes e provedores de serviço), criação de reservas, cancelamento de reservas e gerenciamento do histórico de reservas.
 
@@ -69,23 +68,20 @@ Esta é uma API RESTful construída com NestJS para uma plataforma onde clientes
    DB_USERNAME=seu-usuario
    DB_PASSWORD=sua-senha
    DB_DATABASE=plataforma_de_reservas
-   JWT_SECRET=sua-chave-secreta
+   jwtConstants=sua-chave-secreta
    ```
 
-4. Execute as migrações do banco de dados:
-
-   ```bash
-   npm run typeorm migration:run
-   ```
+4. Inicie a base de dados com docker
+   docker-compose up -d
 
 5. Inicie a aplicação:
    ```bash
-   npm run start
+   npm run start:dev
    ```
 
 ## Utilização
 
-A API estará disponível em `http://localhost:3000`. Use ferramentas como [Postman](https://www.postman.com/) para testar os endpoints.
+A API estará disponível em `http://localhost:3000`. Use ferramentas como insomnia para testar os endpoints.
 
 ### Endpoints Principais
 
@@ -93,8 +89,8 @@ A API estará disponível em `http://localhost:3000`. Use ferramentas como [Post
   - `POST /auth/login`: Autenticar usuário e obter token JWT.
 - **Usuários**
 
-  - `POST /users/register`: Registrar um novo usuário.
-  - `GET /users/:id`: Obter informações de um usuário específico (exceto `passwordHash`).
+  - `POST /users`: Registrar um novo usuário.
+  - `GET /users/deposit`: fazer um deposito de saldo.
 
 - **Serviços**
 
@@ -103,12 +99,11 @@ A API estará disponível em `http://localhost:3000`. Use ferramentas como [Post
 
 - **Reservas**
 
-  - `POST /reservations`: Criar uma nova reserva.
-  - `GET /reservations/:id`: Obter detalhes de uma reserva específica.
+  - `POST /reservations/id-do-servico`: Criar uma nova reserva.
+  - `PATCH /reservations/cancel`: cancelar uma reserva.
+  - `PATCH /reservations/update`: atualizar uma reserva.
 
-- **Histórico de Reservas**
-  - `GET /history`: Listar o histórico de reservas.
-  - `GET /history/customer/:id`: Listar o histórico de reservas de um cliente específico.
+  - `GET /reservations/history`: Listar o histórico de reservas.
 
 ## Docker
 
@@ -119,29 +114,3 @@ Para executar o projeto usando Docker:
    ```bash
    docker-compose up -d
    ```
-
-## Testes
-
-Para executar os testes, use:
-
-```bash
-npm run test
-```
-
-## Contribuição
-
-Se você deseja contribuir com este projeto, por favor, siga os passos abaixo:
-
-1. Fork o repositório.
-2. Crie uma branch para a sua feature (`git checkout -b minha-feature`).
-3. Faça commit das suas alterações (`git commit -am 'Adiciona minha feature'`).
-4. Envie para a branch (`git push origin minha-feature`).
-5. Abra um Pull Request.
-
-## Licença
-
-Este projeto está licenciado sob a [MIT License](LICENSE).
-
----
-
-Se precisar de mais alguma coisa, estarei à disposição!

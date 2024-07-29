@@ -37,7 +37,7 @@ export class ReservationsController {
   }
 
   @Roles(Role.Client)
-  @Patch(':id/cancel')
+  @Patch(':id/update')
   async update(
     @Body() reservationDto: UpdateReservationDto,
     @Param('id') id: string,
