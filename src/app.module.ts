@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { ClientsModule } from './clients/clients.module';
-import { ProvidersModule } from './providers/providers.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -17,8 +16,7 @@ import { ProvidersModule } from './providers/providers.module';
       logging: true,
       autoLoadEntities: true,
     }),
-    ClientsModule,
-    ProvidersModule,
+    UsersModule,
   ],
 })
 export class AppModule {

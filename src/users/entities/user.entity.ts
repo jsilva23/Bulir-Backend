@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({ name: 'clients' })
-export class Client {
+@Entity({ name: 'users' })
+export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -9,5 +9,17 @@ export class Client {
   fullName: string;
 
   @Column({ unique: true })
+  email: string;
+
+  @Column({ unique: true })
   nif: string;
+
+  @Column()
+  password: string;
+
+  @Column()
+  role: string;
+
+  @Column({ default: 0 })
+  balance: number;
 }
