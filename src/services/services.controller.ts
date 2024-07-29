@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Body, UseGuards, Req } from '@nestjs/common';
 import { ServicesService } from './services.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { Roles } from 'src/decorators/roles.decorator';
@@ -11,12 +11,12 @@ export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
   @Roles(Role.Provider)
-  @Post(':email')
+  @Post()
   async create(
     @Body() createServiceDto: CreateServiceDto,
-    @Param('email') email: string,
+    @Req() request: Request,
   ) {
-    return this.servicesService.create(createServiceDto, email);
+    return this.servicesService.create(createServiceDto, request);
   }
 
   @Get()

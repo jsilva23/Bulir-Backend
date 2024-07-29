@@ -5,6 +5,8 @@ import { Reservation } from './entities/reservation.entity';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UsersService } from 'src/users/users.service';
 import { ServicesService } from 'src/services/services.service';
+import { UpdateReservationDto } from './dto/update-reservation.dto copy';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class ReservationsService {
@@ -16,27 +18,26 @@ export class ReservationsService {
   ) {}
 
   async create(
+    request: Request,
     reservationDto: CreateReservationDto,
     id: string,
   ): Promise<Reservation> {
-    const customer = await this.usersService.findOne(id);
+    const currentUser: User = request['currentUser'];
 
-    const service = await this.servicesService.findOne(
-      reservationDto.serviceId,
-    );
+    const service = await this.servicesService.findOne(id);
 
-    if (!customer || !service) {
+    if (!service) {
       throw new BadRequestException('Serviço não encotrado');
     }
 
-    if (customer.balance < service.price) {
+    if (currentUser.balance < service.price) {
       throw new BadRequestException(
         'Saldo insuficiente para realizar o pedido! Faça um depósito de saldo.',
       );
     }
 
-    const newBalance = customer.balance - service.price;
-    await this.usersService.updateUserBalance(customer.id, newBalance);
+    const newBalance = currentUser.balance - service.price;
+    await this.usersService.updateUserBalance(currentUser.id, newBalance);
 
     const newProviderBalance = service.provider.balance + service.price;
     await this.usersService.updateUserBalance(
@@ -46,33 +47,33 @@ export class ReservationsService {
 
     const reservation = new Reservation();
     reservation.service = service;
-    reservation.customer = customer;
+    reservation.customer = currentUser;
     reservation.date = reservationDto.date;
-
-    console.log('REserva: ', reservation);
 
     return this.reservationsRepository.save(reservation);
   }
 
-  async cancel(id: string) {
-    const reservation = await this.reservationsRepository.findOne({
-      where: { id },
-      relations: ['customer', 'service'],
-    });
+  async cancel(id: string, request: Request) {
+    const reservation = await this.getReservation(id);
 
     if (!reservation) {
       throw new BadRequestException('Reserva não encotrada');
     }
 
+    const currentUser: User = request['currentUser'];
+
     reservation.canceled = true;
-    const customer = reservation.customer;
+
     const service = reservation.service;
 
-    customer.balance += service.price;
-    await this.usersService.updateUserBalance(customer.id, customer.balance);
+    const customerNewBalance = currentUser.balance + service.price;
+    await this.usersService.updateUserBalance(
+      currentUser.id,
+      customerNewBalance,
+    );
 
     const serviceFound = await this.servicesService.findOne(service.id);
-    console.log('Service: ', serviceFound);
+
     serviceFound.provider.balance -= service.price;
     await this.usersService.updateUserBalance(
       serviceFound.provider.id,
@@ -82,7 +83,27 @@ export class ReservationsService {
     return this.reservationsRepository.update(id, reservation);
   }
 
+  async update(id: string, reservationDto: UpdateReservationDto) {
+    const reservation = await this.getReservation(id);
+
+    if (!reservation) {
+      throw new BadRequestException('Reserva não encotrada');
+    }
+
+    return this.reservationsRepository.update(id, { ...reservationDto });
+  }
+
   async findAll(): Promise<Reservation[]> {
-    return this.reservationsRepository.find();
+    return this.reservationsRepository.find({
+      relations: ['customer', 'service'],
+    });
+  }
+
+  async getReservation(id: string): Promise<Reservation> {
+    const reservation = await this.reservationsRepository.findOne({
+      where: { id },
+      relations: ['customer', 'service'],
+    });
+    return reservation;
   }
 }

@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-export class CreateReservationDto {
+export class UpdateReservationDto {
   @IsNotEmpty()
   date: Date;
 }

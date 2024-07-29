@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Service } from './entities/service.entity';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UsersService } from 'src/users/users.service';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class ServicesService {
@@ -15,15 +16,16 @@ export class ServicesService {
 
   async create(
     createServiceDto: CreateServiceDto,
-    email: string,
+    request: Request,
   ): Promise<Service> {
     const service = new Service();
     service.name = createServiceDto.name;
     service.description = createServiceDto.description;
     service.price = createServiceDto.price;
 
-    const provider = await this.usersService.findUserByEmail(email);
-    service.provider = provider;
+    const currentUser: User = request['currentUser'];
+
+    service.provider = currentUser;
 
     return this.servicesRepository.save(service);
   }
