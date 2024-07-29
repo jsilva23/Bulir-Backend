@@ -5,7 +5,6 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  OneToOne,
   JoinColumn,
 } from 'typeorm';
 
@@ -17,7 +16,7 @@ export class Reservation {
   @ManyToOne(() => User, (user) => user.reservations)
   customer: User;
 
-  @OneToOne(() => Service)
+  @ManyToOne(() => Service)
   @JoinColumn()
   service: Service;
 

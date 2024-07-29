@@ -19,7 +19,6 @@ export class ReservationsService {
     reservationDto: CreateReservationDto,
     id: string,
   ): Promise<Reservation> {
-    console.log('ID: ', id);
     const customer = await this.usersService.findOne(id);
 
     const service = await this.servicesService.findOne(
@@ -50,10 +49,38 @@ export class ReservationsService {
     reservation.customer = customer;
     reservation.date = reservationDto.date;
 
+    console.log('REserva: ', reservation);
+
     return this.reservationsRepository.save(reservation);
   }
 
-  async cancel() {}
+  async cancel(id: string) {
+    const reservation = await this.reservationsRepository.findOne({
+      where: { id },
+      relations: ['customer', 'service'],
+    });
+
+    if (!reservation) {
+      throw new BadRequestException('Reserva não encotrada');
+    }
+
+    reservation.canceled = true;
+    const customer = reservation.customer;
+    const service = reservation.service;
+
+    customer.balance += service.price;
+    await this.usersService.updateUserBalance(customer.id, customer.balance);
+
+    const serviceFound = await this.servicesService.findOne(service.id);
+    console.log('Service: ', serviceFound);
+    serviceFound.provider.balance -= service.price;
+    await this.usersService.updateUserBalance(
+      serviceFound.provider.id,
+      serviceFound.provider.balance,
+    );
+
+    return this.reservationsRepository.update(id, reservation);
+  }
 
   async findAll(): Promise<Reservation[]> {
     return this.reservationsRepository.find();

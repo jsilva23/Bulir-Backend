@@ -15,8 +15,8 @@ export class ReservationsController {
   }
 
   @Patch(':id/cancel')
-  async cancel() {
-    return this.reservationsService.cancel();
+  async cancel(@Param('id') id: string) {
+    return this.reservationsService.cancel(id);
   }
 
   @Get()
