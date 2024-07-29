@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as argon2 from 'argon2';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { Role } from 'src/util/roles';
@@ -37,7 +37,19 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
+  async findOne(id: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+    });
+
+    return user;
+  }
+
   async findUserByEmail(email: string): Promise<User | null> {
     return this.usersRepository.findOneBy({ email });
+  }
+
+  updateUserBalance(id: string, balance: number): Promise<UpdateResult> {
+    return this.usersRepository.update(id, { balance });
   }
 }

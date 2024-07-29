@@ -1,14 +1,17 @@
-import { Controller, Post, Get, Body, Patch } from '@nestjs/common';
+import { Controller, Post, Get, Body, Patch, Param } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
-import { CreateServiceDto } from 'src/services/dto/create-service.dto';
+import { CreateReservationDto } from './dto/create-reservation.dto';
 
 @Controller('reservations')
 export class ReservationsController {
   constructor(private readonly reservationsService: ReservationsService) {}
 
-  @Post()
-  async create(@Body() reservationDto: CreateServiceDto) {
-    return this.reservationsService.create(reservationDto);
+  @Post(':id')
+  async create(
+    @Body() reservationDto: CreateReservationDto,
+    @Param('id') id: string,
+  ) {
+    return this.reservationsService.create(reservationDto, id);
   }
 
   @Patch(':id/cancel')

@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Service } from 'src/services/entities/service.entity';
 import { Role } from 'src/util/roles';
+import { Reservation } from 'src/reservations/entities/reservation.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -27,4 +28,7 @@ export class User {
 
   @OneToMany(() => Service, (service) => service.provider)
   services: Service[];
+
+  @OneToMany(() => Reservation, (reservation) => reservation.customer)
+  reservations: Reservation[];
 }

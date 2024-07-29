@@ -31,4 +31,13 @@ export class ServicesService {
   async findAll(): Promise<Service[]> {
     return this.servicesRepository.find({ relations: ['provider'] });
   }
+
+  async findOne(id: string): Promise<Service> {
+    const service = await this.servicesRepository.findOne({
+      where: { id },
+      relations: ['provider'],
+    });
+
+    return service;
+  }
 }
