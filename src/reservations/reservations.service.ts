@@ -5,7 +5,7 @@ import { Reservation } from './entities/reservation.entity';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UsersService } from 'src/users/users.service';
 import { ServicesService } from 'src/services/services.service';
-import { UpdateReservationDto } from './dto/update-reservation.dto copy';
+import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { User } from 'src/users/entities/user.entity';
 
 @Injectable()

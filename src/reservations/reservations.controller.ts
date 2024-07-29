@@ -13,7 +13,7 @@ import { CreateReservationDto } from './dto/create-reservation.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/util/roles';
-import { UpdateReservationDto } from './dto/update-reservation.dto copy';
+import { UpdateReservationDto } from './dto/update-reservation.dto';
 
 @UseGuards(RolesGuard)
 @Controller('reservations')
