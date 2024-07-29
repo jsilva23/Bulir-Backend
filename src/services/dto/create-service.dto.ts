@@ -3,11 +3,11 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateServiceDto {
   @IsNotEmpty()
   @IsString()
-  readonly name: string;
+  name: string;
 
   @IsString()
-  readonly description: string;
+  description: string;
 
   @IsNotEmpty()
-  readonly price: number;
+  price: number;
 }

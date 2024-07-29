@@ -1,5 +1,6 @@
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Service } from 'src/services/entities/service.entity';
 import { Role } from 'src/util/roles';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User {
@@ -23,4 +24,7 @@ export class User {
 
   @Column({ default: 0 })
   balance: number;
+
+  @OneToMany(() => Service, (service) => service.provider)
+  services: Service[];
 }
