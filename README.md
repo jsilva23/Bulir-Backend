@@ -1,73 +1,147 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+Claro! Aqui está um exemplo de um README para o projeto NestJS:
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+---
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Plataforma de Reservas API
 
-## Description
+Esta é uma API RESTful construída com NestJS para uma plataforma onde clientes podem fazer reservas em diferentes serviços. A API permite o gerenciamento de usuários (clientes e provedores de serviço), criação de reservas, cancelamento de reservas e gerenciamento do histórico de reservas.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Requisitos & Funcionalidades Básicas
 
-## Installation
+### 1. Cadastro de Usuários
+
+- **Dados necessários**: Nome Completo, NIF, E-mail, Senha.
+- **Regras**: NIF e E-mail devem ser únicos no sistema.
+- **Tipos de usuário**: Cliente, Prestador de Serviço.
+
+### 2. Autenticação e Autorização
+
+- Usuários devem se autenticar para acessar a API.
+- Utiliza JWT para autenticação.
+
+### 3. Gerenciamento de Serviços
+
+- Provedores podem cadastrar os serviços que oferecem.
+- Cada serviço deve ter um nome, descrição, preço e prestador de serviço associado.
+
+### 4. Reserva de Serviços
+
+- Clientes podem fazer reservas em serviços de provedores.
+- Antes da reserva, verificar se o cliente tem saldo suficiente.
+- Atualizar o saldo do cliente e do prestador de serviço após a reserva.
+
+### 5. Histórico de Reservas
+
+- Manter um histórico de todas as reservas realizadas na plataforma.
+
+### 6. Validações
+
+- Verificar se o usuário autenticado tem permissão para criar, atualizar ou cancelar uma reserva.
+- Garantir que o saldo do cliente seja atualizado de forma atômica.
+
+## Tecnologias Utilizadas
+
+- [NestJS](https://nestjs.com/)
+- [TypeORM](https://typeorm.io/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Docker](https://www.docker.com/)
+
+## Instalação
+
+1. Clone o repositório:
+
+   ```bash
+   git clone https://github.com/seu-usuario/plataforma-de-reservas-api.git
+   cd plataforma-de-reservas-api
+   ```
+
+2. Instale as dependências:
+
+   ```bash
+   npm install
+   ```
+
+3. Configure as variáveis de ambiente. Crie um arquivo `.env` na raiz do projeto e adicione as seguintes variáveis:
+
+   ```plaintext
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_USERNAME=seu-usuario
+   DB_PASSWORD=sua-senha
+   DB_DATABASE=plataforma_de_reservas
+   JWT_SECRET=sua-chave-secreta
+   ```
+
+4. Execute as migrações do banco de dados:
+
+   ```bash
+   npm run typeorm migration:run
+   ```
+
+5. Inicie a aplicação:
+   ```bash
+   npm run start
+   ```
+
+## Utilização
+
+A API estará disponível em `http://localhost:3000`. Use ferramentas como [Postman](https://www.postman.com/) para testar os endpoints.
+
+### Endpoints Principais
+
+- **Autenticação**
+  - `POST /auth/login`: Autenticar usuário e obter token JWT.
+- **Usuários**
+
+  - `POST /users/register`: Registrar um novo usuário.
+  - `GET /users/:id`: Obter informações de um usuário específico (exceto `passwordHash`).
+
+- **Serviços**
+
+  - `POST /services`: Criar um novo serviço (somente para provedores).
+  - `GET /services`: Listar todos os serviços.
+
+- **Reservas**
+
+  - `POST /reservations`: Criar uma nova reserva.
+  - `GET /reservations/:id`: Obter detalhes de uma reserva específica.
+
+- **Histórico de Reservas**
+  - `GET /history`: Listar o histórico de reservas.
+  - `GET /history/customer/:id`: Listar o histórico de reservas de um cliente específico.
+
+## Docker
+
+Para executar o projeto usando Docker:
+
+1. Certifique-se de ter o Docker instalado e em execução.
+2. Crie e inicie os contêineres:
+   ```bash
+   docker-compose up -d
+   ```
+
+## Testes
+
+Para executar os testes, use:
 
 ```bash
-$ npm install
+npm run test
 ```
 
-## Running the app
+## Contribuição
 
-```bash
-# development
-$ npm run start
+Se você deseja contribuir com este projeto, por favor, siga os passos abaixo:
 
-# watch mode
-$ npm run start:dev
+1. Fork o repositório.
+2. Crie uma branch para a sua feature (`git checkout -b minha-feature`).
+3. Faça commit das suas alterações (`git commit -am 'Adiciona minha feature'`).
+4. Envie para a branch (`git push origin minha-feature`).
+5. Abra um Pull Request.
 
-# production mode
-$ npm run start:prod
-```
+## Licença
 
-## Test
+Este projeto está licenciado sob a [MIT License](LICENSE).
 
-```bash
-# unit tests
-$ npm run test
+---
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+Se precisar de mais alguma coisa, estarei à disposição!
