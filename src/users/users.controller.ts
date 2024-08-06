@@ -20,6 +20,11 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('balance')
+  async cancel(@Req() request: Request) {
+    return this.usersService.getUserBalance(request);
+  }
+
   @Patch('deposit')
   cashDeposit(@Body() depositDto: DepositDto, @Req() request: Request) {
     const currentUser: User = request['currentUser'];

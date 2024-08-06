@@ -45,8 +45,20 @@ export class UsersService {
     return user;
   }
 
-  async findUserByEmail(email: string): Promise<User | null> {
-    return this.usersRepository.findOneBy({ email });
+  async findUserByEmail(identifier: string): Promise<User | null> {
+    return this.usersRepository.findOne({
+      where: [{ nif: identifier }, { email: identifier }],
+    });
+  }
+
+  getUserBalance(request: Request): Promise<User> {
+    const currentUser: User = request['currentUser'];
+    return this.usersRepository.findOne({
+      where: { id: currentUser.id },
+      select: {
+        balance: true,
+      },
+    });
   }
 
   updateUserBalance(id: string, balance: number): Promise<UpdateResult> {

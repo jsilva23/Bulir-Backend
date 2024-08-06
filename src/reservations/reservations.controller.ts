@@ -46,7 +46,7 @@ export class ReservationsController {
   }
 
   @Get('history')
-  async findAll() {
-    return this.reservationsService.findAll();
+  async findAll(@Req() request: Request) {
+    return this.reservationsService.findAll(request);
   }
 }

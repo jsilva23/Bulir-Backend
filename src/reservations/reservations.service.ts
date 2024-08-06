@@ -90,12 +90,21 @@ export class ReservationsService {
       throw new BadRequestException('Reserva não encotrada');
     }
 
-    return this.reservationsRepository.update(id, { ...reservationDto });
+    return this.reservationsRepository.update(id, {
+      ...reservationDto,
+      canceled: false,
+    });
   }
 
-  async findAll(): Promise<Reservation[]> {
+  async findAll(request: Request): Promise<Reservation[]> {
+    const currentUser: User = request['currentUser'];
     return this.reservationsRepository.find({
-      relations: ['customer', 'service'],
+      relations: { customer: true, service: true },
+      where: {
+        customer: {
+          id: currentUser.id,
+        },
+      },
     });
   }
 

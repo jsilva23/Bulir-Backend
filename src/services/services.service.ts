@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Service } from './entities/service.entity';
@@ -30,6 +30,16 @@ export class ServicesService {
     return this.servicesRepository.save(service);
   }
 
+  async update(createServiceDto: CreateServiceDto, id: string) {
+    const service = await this.findOne(id);
+
+    if (!service) {
+      throw new BadRequestException('Reserva não encotrada');
+    }
+
+    return this.servicesRepository.update(id, { ...createServiceDto });
+  }
+
   async findAll(): Promise<Service[]> {
     return this.servicesRepository.find({ relations: ['provider'] });
   }
@@ -41,5 +51,18 @@ export class ServicesService {
     });
 
     return service;
+  }
+
+  async findServices(request: Request): Promise<Service[]> {
+    const currentUser: User = request['currentUser'];
+    return this.servicesRepository
+      .createQueryBuilder('services')
+      .innerJoinAndSelect('services.provider', 'provider')
+      .where('provider.id = :id', { id: currentUser.id })
+      .getMany();
+  }
+
+  async remove(id: string): Promise<void> {
+    await this.servicesRepository.delete(id);
   }
 }
